@@ -1,0 +1,15 @@
+test.v
+../../rtl/network.v
+../../rtl/layer.v
+../../rtl/layer_ctrl.v
+../../rtl/config_reg.v
+../../rtl/dataflow.v
+../../rtl/shift_reg_in.v
+../../rtl/shift_reg_out.v
+../../rtl/buffer1.v
+../../rtl/buffer2.v
+../../model/CIM_MACRO.v
+../../model/MEM312X48.v
+../../model/MEM24X96.v
+../../model/ICG.v
+
