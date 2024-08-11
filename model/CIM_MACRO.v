@@ -62,9 +62,9 @@ integer j;
 
 reg CLR1; // reset immediately
 reg CLR2; // reset after firing
-reg LS;
-reg INT;
-reg CMP;
+reg LOAD; // load spike enable
+reg INT;  // integration enable
+reg FIRE; // firing enable
 
 initial begin
     NEURON_OUT = 0;
@@ -88,20 +88,20 @@ always @(posedge CLK or negedge RSTB)
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB) begin
-        LS <= 1'b0;
+        LOAD <= 1'b0;
         INT <= 1'b0;
-        CMP <= 1'b0;
+        FIRE <= 1'b0;
         REQ <= 1'b0;
     end
     else begin
-        LS <= EN;
-        INT <= LS;
-        CMP <= INT;
-        REQ <= CMP;
+        LOAD <= EN;
+        INT <= LOAD;
+        FIRE <= INT;
+        REQ <= FIRE;
     end
 
 always @(*)
-    if (LS)
+    if (LOAD)
         spike_reg = SPIKE_REMAP;
     else
         spike_reg = spike_reg;
@@ -127,7 +127,7 @@ begin
             end
         end
     end
-    else if (CMP) begin
+    else if (FIRE) begin
         for (i=0; i<16; i=i+1) begin
             NEURON_OUT[i] <= 0;
             if (enb[i] == 0) begin
@@ -177,3 +177,4 @@ always @(NCFG) begin
 end
 
 endmodule
+
