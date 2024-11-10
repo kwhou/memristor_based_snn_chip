@@ -30,8 +30,7 @@ parameter D1_WIDTH = 5;
 parameter D2_WIDTH = 9;
 parameter NCFG_WIDTH = 6 * 16;
 parameter TPD_WIDTH = 4;
-parameter IO_WIDTH = 8;
-parameter CNT_WIDTH = 1;
+parameter IO_WIDTH = 16;
 
 // Inference Mode
 input CLK;                       // clock
@@ -80,7 +79,7 @@ assign Q = CE[0]? Q_L1 :
            CE[3]? Q_L4 :
            CE[4]? Q_L5 : 8'b0;
 
-layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer1 (
+layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer1 (
     // Inference Mode
     .CLK        (CLK),
     .RSTB       (RSTB),
@@ -105,7 +104,7 @@ layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, 
     .CL         (CL)
 );
 
-layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer2 (
+layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer2 (
     // Inference Mode
     .CLK        (CLK),
     .RSTB       (RSTB),
@@ -130,7 +129,7 @@ layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, 
     .CL         (CL)
 );
 
-layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer3 (
+layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer3 (
     // Inference Mode
     .CLK        (CLK),
     .RSTB       (RSTB),
@@ -155,7 +154,7 @@ layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, 
     .CL         (CL)
 );
 
-layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer4 (
+layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer4 (
     // Inference Mode
     .CLK        (CLK),
     .RSTB       (RSTB),
@@ -180,7 +179,7 @@ layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, 
     .CL         (CL)
 );
 
-layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer5 (
+layer #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer5 (
     // Inference Mode
     .CLK        (CLK),
     .RSTB       (RSTB),

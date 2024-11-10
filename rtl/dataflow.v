@@ -3,7 +3,6 @@ module dataflow (
     CLK,
     RSTB,
     IN_VALID,
-    IN_VALID_INTERNAL,
     EN,
     FT,
     HW,
@@ -16,15 +15,11 @@ module dataflow (
 parameter HW_WIDTH = 5;
 parameter T_WIDTH = 5;
 parameter TPD_WIDTH = 4;
-parameter IO_WIDTH = 8;
-parameter CNT_WIDTH = 1;
-parameter CNT_MAX = 16/IO_WIDTH-1;
-parameter CNT_HALF = 8/IO_WIDTH-1;
+parameter IO_WIDTH = 16;
 
 input CLK;
 input RSTB;
 input IN_VALID;
-input IN_VALID_INTERNAL;
 output reg EN;
 output reg FT;
 input [HW_WIDTH-1:0] HW; // H-1 and W-1
@@ -37,8 +32,6 @@ reg [HW_WIDTH-1:0] h;
 reg [HW_WIDTH-1:0] w;
 reg [T_WIDTH-1:0] t;
 reg e;
-reg EI;
-reg [CNT_WIDTH-1:0] cnt;
 reg pd_tmp;
 reg [TPD_WIDTH-1:0] pd_cnt;
 
@@ -46,7 +39,7 @@ parameter I = 4;
 parameter J = 4;
 
 always @(*)
-    if (!IN_VALID_INTERNAL)
+    if (!IN_VALID)
         e = 0;
     else if (h <= I-2)
         e = 0;
@@ -58,49 +51,33 @@ always @(*)
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         t <= 0;
-    else if (IN_VALID_INTERNAL && t == T)
+    else if (IN_VALID && t == T)
         t <= 0;
-    else if (IN_VALID_INTERNAL)
+    else if (IN_VALID)
         t <= t + 1;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         w <= 0;
-    else if (IN_VALID_INTERNAL && t == T && w == HW)
+    else if (IN_VALID && t == T && w == HW)
         w <= 0;
-    else if (IN_VALID_INTERNAL && t == T)
+    else if (IN_VALID && t == T)
         w <= w + 1;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         h <= 0;
-    else if (IN_VALID_INTERNAL && t == T && w == HW && h == HW)
+    else if (IN_VALID && t == T && w == HW && h == HW)
         h <= 0;
-    else if (IN_VALID_INTERNAL && t == T && w == HW)
+    else if (IN_VALID && t == T && w == HW)
         h <= h + 1;
-
-always @(posedge CLK or negedge RSTB)
-    if (!RSTB)
-        cnt <= 2'd0;
-    else if (e)
-        cnt <= 2'd0;
-    else if (EI)
-        cnt <= cnt + 2'd1;
-
-always @(posedge CLK or negedge RSTB)
-    if (!RSTB)
-        EI <= 1'b0;
-    else if (e)
-        EI <= 1'b1;
-    else if (cnt == CNT_MAX)
-        EI <= 1'b0;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         EN <= 1'b0;
     else if (e)
         EN <= 1'b1;
-    else if (cnt == CNT_HALF)
+    else
         EN <= 1'b0;
 
 always @(posedge CLK or negedge RSTB)
@@ -108,7 +85,7 @@ always @(posedge CLK or negedge RSTB)
         FT <= 0;
     else if (e && t == 0)
         FT <= 1;
-    else if (cnt == CNT_HALF)
+    else
         FT <= 0;
 
 always @(posedge CLK or negedge RSTB)
@@ -128,7 +105,7 @@ always @(posedge CLK or negedge RSTB)
         pd_tmp <= 1;
     else if (IN_VALID && t == 0 && w == 0 && h == 0)
         pd_tmp <= 0;
-    else if (IN_VALID_INTERNAL && t == T && w == HW && h == HW)
+    else if (IN_VALID && t == T && w == HW && h == HW)
         pd_tmp <= 1;
 
 always @(posedge CLK or negedge RSTB)

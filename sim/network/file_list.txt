@@ -4,8 +4,6 @@ test.v
 ../../rtl/layer_ctrl.v
 ../../rtl/config_reg.v
 ../../rtl/dataflow.v
-../../rtl/shift_reg_in.v
-../../rtl/shift_reg_out.v
 ../../rtl/buffer1.v
 ../../rtl/buffer2.v
 ../../model/CIM_MACRO.v

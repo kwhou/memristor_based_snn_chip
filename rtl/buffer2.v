@@ -2,7 +2,7 @@
 module buffer2 (
     CLK,
     RSTB,
-    IN_VALID_INTERNAL,
+    IN_VALID,
     D,
     Q,
     DEPTH, // depth-1
@@ -11,61 +11,66 @@ module buffer2 (
 
 input CLK;
 input RSTB;
-input IN_VALID_INTERNAL;
+input IN_VALID;
 input [47:0] D;
 output [47:0] Q;
 input [8:0] DEPTH; // depth-1
 input PD;
 
-wire CE;
-wire CEB;
-reg WEB;
+wire MEA;
+wire MEB;
+wire ME;
+reg WEA;
 reg [8:0] wptr;
 reg [8:0] rptr;
-wire [8:0] A;
+wire [8:0] ADRA;
+wire [8:0] ADRB;
 
-reg CLK_EN;
 wire CLK_GATE;
 
-assign CEB = ~(IN_VALID_INTERNAL | ~WEB);
-assign CE = ~CEB;
+assign MEA = WEA;
+assign MEB = IN_VALID;
+assign ME = MEA | MEB;
 
-assign A = WEB? rptr : wptr;
+assign ADRA = wptr;
+assign ADRB = rptr;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
-        WEB <= 1'b1;
-    else if (IN_VALID_INTERNAL)
-        WEB <= 1'b0;
+        WEA <= 1'b0;
+    else if (IN_VALID)
+        WEA <= 1'b1;
     else
-        WEB <= 1'b1;
+        WEA <= 1'b0;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         rptr <= 0;
-    else if (IN_VALID_INTERNAL && rptr == DEPTH)
+    else if (IN_VALID && rptr == DEPTH)
         rptr <= 0;
-    else if (IN_VALID_INTERNAL)
+    else if (IN_VALID)
         rptr <= rptr + 1;
 
 always @(posedge CLK or negedge RSTB)
     if (!RSTB)
         wptr <= 0;
-    else if (!WEB && wptr == DEPTH)
+    else if (WEA && wptr == DEPTH)
         wptr <= 0;
-    else if (!WEB)
+    else if (WEA)
         wptr <= wptr + 1;
 
-ICG icg (.CP(CLK), .E(CE), .Q(CLK_GATE));
+ICG icg (.CP(CLK), .E(ME), .Q(CLK_GATE));
 
 MEM312X48 mem1 (
-    .PD(PD),
-    .CLK(CLK_GATE),
-    .CEB(CEB),
-    .WEB(WEB),
-    .A(A),
-    .D(D), 
-    .Q(Q)
+    .PD     (PD),
+    .CLK    (CLK_GATE),
+    .MEA    (MEA),
+    .WEA    (WEA),
+    .ADRA   (ADRA),
+    .DA     (D), 
+    .MEB    (MEB),
+    .ADRB   (ADRB),
+    .QB     (Q)
 );
 
 endmodule

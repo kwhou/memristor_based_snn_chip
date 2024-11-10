@@ -8,7 +8,7 @@ parameter D1_WIDTH = 5;
 parameter D2_WIDTH = 9;
 parameter NCFG_WIDTH = 6 * 16;
 parameter TPD_WIDTH = 4;
-parameter IO_WIDTH = 8;
+parameter IO_WIDTH = 16;
 parameter CLK_HALF_PERIOD = 5;
 
 parameter HW = 16;
@@ -121,7 +121,7 @@ initial begin
             if (OUT_VALID) begin
                 if (n % 200 == 0) $display("Output: %d / %0d", n, ntotal);
                 n = n + 1;
-                output_spike = {OUT_SPIKE, output_spike[15:IO_WIDTH]};
+                output_spike = OUT_SPIKE;
                 if (n % (CK/IO_WIDTH) == 0) begin
                     if (output_spike !== mem_output[line]) begin
                         error = 1;

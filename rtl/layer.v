@@ -30,8 +30,7 @@ parameter D1_WIDTH = 5;
 parameter D2_WIDTH = 9;
 parameter NCFG_WIDTH = 6 * 16;
 parameter TPD_WIDTH = 4;
-parameter IO_WIDTH = 8;
-parameter CNT_WIDTH = 1;
+parameter IO_WIDTH = 16;
 
 // Inference Mode
 input CLK;
@@ -65,7 +64,7 @@ wire SWP;                   // 0: neuron fires when v>vth, 1: neuron fires when 
 wire REQ;                   // neuron output request
 wire [15:0] NEURON_OUT;     // neuron output data
 
-layer_ctrl #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH, CNT_WIDTH) layer_ctrl (
+layer_ctrl #(HW_WIDTH, T_WIDTH, D1_WIDTH, D2_WIDTH, NCFG_WIDTH, TPD_WIDTH, IO_WIDTH) layer_ctrl (
     .CLK            (CLK),
     .RSTB           (RSTB),
     .TM             (TM),
